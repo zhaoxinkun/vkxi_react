@@ -1,5 +1,5 @@
 import '@/css/App.css'
-import {RouterConfig} from "./router/index.jsx";
+import {RouterConfig} from "./router/config.jsx";
 import {App as AntdApp} from 'antd';
 
 

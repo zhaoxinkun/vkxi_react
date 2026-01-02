@@ -1,9 +1,104 @@
-function Layout() {
+import "@/css/main.css"
+import {Layout, Button, Menu} from "antd";
+import {useNavigate, Link, Outlet} from "react-router-dom";
+import {MailOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons';
+import {useState} from "react";
+
+const {Header, Sider, Content} = Layout;
+
+function LayoutPage() {
+
+    // 编程导航
+    const navigate = useNavigate()
+
+    // 侧边栏数据
+    const [SiderItems] = useState([
+        {
+            key: 'index',
+            label: <Link to="/home/index">企业首页</Link>,
+            icon: <MailOutlined/>,
+        },
+        {
+            key: 'course',
+            label: <Link to="/home/course">课程管理</Link>,
+            icon: <MailOutlined/>,
+        },
+        {
+            key: 'student',
+            label: <Link to="/home/student">学生管理</Link>,
+            icon: <MailOutlined/>,
+        },
+        {
+            key: 'teacher',
+            label: "教师管理",
+            icon: <MailOutlined/>,
+            children: [
+                {
+                    key: 'teacherInfo',
+                    label: <Link to="/home/teacher/info">教师信息</Link>,
+                    icon: <MailOutlined/>,
+                },
+                {
+                    key: 'coursesTaught',
+                    label: <Link to="/home/teacher/course">教师课程</Link>,
+                    icon: <MailOutlined/>,
+                },
+            ]
+        },
+    ])
+
+    // 侧边栏是否折叠
+    const [collapsed, setCollapsed] = useState(false);
+    const toggleCollapsed = () => {
+        setCollapsed(!collapsed);
+    };
+
     return (
-        <div>
-            this is layout
+        <div className="module">
+            <Layout>
+                {/*侧边栏*/}
+                <Sider
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={setCollapsed}
+                    width={150}
+                    collapsedWidth={64}
+                >
+                    <div className="logo-title">
+                        {
+                            collapsed ? "教务" : "朝夕教育教务系统"
+                        }
+                    </div>
+                    <div className="sider-toggle">
+                        {/*侧边栏折叠按钮*/}
+                        <Button type="primary" onClick={toggleCollapsed} style={{margin: "0px auto"}}>
+                            {collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                        </Button>
+                    </div>
+                    <Menu
+                        defaultSelectedKeys={['sub2']}
+                        defaultOpenKeys={['sub2']}
+                        mode="inline"
+                        items={SiderItems}
+                        theme="dark"
+                        inlineCollapsed={collapsed}
+                    />
+                </Sider>
+
+
+                {/*主内容区域*/}
+                <Layout className="site-layout">
+                    <Header className="site-layout-background">
+                        <Button type="primary" onClick={() => navigate("/login")}>用户退出</Button>
+                    </Header>
+                    <Content className="site-layout-background" style={{margin: 16, padding: 20}}>
+                        {/*路由出口*/}
+                        <Outlet></Outlet>
+                    </Content>
+                </Layout>
+            </Layout>
         </div>
     );
 }
 
-export default Layout;
+export default LayoutPage;
