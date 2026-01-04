@@ -17,6 +17,11 @@ export default function EChart(props) {
         // 2. 设置配置
         chartRef.current.setOption(option);
 
+        // 4. 自适应
+        window.addEventListener('resize', () => {
+            chartRef.current?.resize();
+        });
+
         // 3. 卸载清理
         return () => {
             chartRef.current?.dispose();
