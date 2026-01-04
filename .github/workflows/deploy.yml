@@ -15,11 +15,27 @@ jobs:
         uses: actions/checkout@v4
 
       # 2. 安装 Node
+#      - name: Setup Node
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: 20
+#          cache: pnpm
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+
+      - name: Enable corepack (pnpm)
+        run: |
+          corepack enable
+          corepack prepare pnpm@8 --activate
+
+      - name: Verify pnpm
+        run: pnpm -v
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
 
       # 3. 安装 pnpm
       - name: Setup pnpm
