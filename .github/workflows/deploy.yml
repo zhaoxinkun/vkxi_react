@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 20
 
-      # 3. 启用 pnpm（官方推荐）
+      # 3. 启用 pnpm
       - name: Enable corepack (pnpm)
         run: |
           corepack enable
@@ -29,19 +29,16 @@ jobs:
       - name: Verify pnpm
         run: pnpm -v
 
-      # 4. 安装依赖（⚠️ 一定要在项目目录）
+      # 4. 安装依赖（⚠️ 就在仓库根目录）
       - name: Install dependencies
-        working-directory: higschool_react
         run: pnpm install --frozen-lockfile
 
       # 5. 构建
       - name: Build
-        working-directory: higschool_react
         run: pnpm build
 
       # 6. 打包 dist
       - name: Archive dist
-        working-directory: higschool_react
         run: tar -czf dist.tar.gz dist
 
       # 7. 上传到服务器
@@ -52,7 +49,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: higschool_react/dist.tar.gz
+          source: dist.tar.gz
           target: /tmp
 
       # 8. 发布 + 切软链接
