@@ -16,6 +16,7 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
+
 .site-layout .site-layout-background {
     background: #fff;
 }
@@ -50,10 +51,4 @@
 
 .ant-btn-primary {
     margin-right: 35px;
-}
-
-
-.sider-toggle {
-    display: flex;
-    justify-content: center;
 }

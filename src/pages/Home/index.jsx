@@ -1,8 +1,12 @@
 function Home() {
     return (
-        <div>
-            this is home
-        </div>
+        <>
+
+            <div className="banner"></div>
+            <div className="module-box">
+            </div>
+
+        </>
     );
 }
 

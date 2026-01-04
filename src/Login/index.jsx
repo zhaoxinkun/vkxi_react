@@ -2,6 +2,10 @@ import "@/css/login.css"
 import {Button, Form, Input, Checkbox, Flex, App} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
+import {userLogin} from "@/api/api.js";
+import md5 from "md5";
+import {setToken} from "@/utils/toekn.js";
+import {useState} from "react";
 
 
 function Login() {
@@ -13,25 +17,33 @@ function Login() {
 
     const {message} = App.useApp(); // ✅ v6 使用正解
 
-    const onFinish = () => {
+    const [loading, setLoading] = useState(false); //防止多次点击发送登陆请求
 
-        // 显示loading
-        const hide = message.loading('登录中...', 0);
+    const onFinish = async (value) => {
+
+        setLoading(true);
+        const {account, password} = value;
 
         try {
+            // 获取结果
+            let res = (await userLogin({
+                account,
+                password: md5(password),
+            })).data;
 
-            // 发送接口请求
-
-            // ok提示
-            hide()
-            message.success('登录成功')
-            form.resetFields()
-            navigate('/home')
-
-        } catch (err) {
-            hide();
-            message.error('登录失败，请重试');
-            console.log('validateFields error', err)
+            // 判断进入
+            if (res.code === 20000) {
+                setToken(res.token)
+                message.success(res.msg || '登录成功');
+                form.resetFields()
+                navigate('/home')
+            } else {
+                message.error(res.msg || '登录失败，请重试');
+            }
+        } catch (error) {
+            message.error('网络异常，请稍后重试');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -46,16 +58,19 @@ function Login() {
                     <Form
                         form={form}
                         name="login"
-                        initialValues={{remember: true}}
+                        initialValues={{
+                            account: "admin",
+                            password: "admin@123"
+                        }}
                         style={{maxWidth: 600}}
                         onFinish={onFinish}
                     >
 
                         <Form.Item
-                            name="username"
+                            name="account"
                             rules={[
                                 {required: true, message: 'Please input your Username!'},
-                                {min: 6, message: 'Username must be at least 6 characters long!'}]}
+                                {min: 3, message: 'Username must be at least 3 characters long!'}]}
                         >
                             <Input prefix={<UserOutlined/>} placeholder="Username"/>
                         </Form.Item>
@@ -64,7 +79,7 @@ function Login() {
                             name="password"
                             rules={[
                                 {required: true, message: 'Please input your Password!'},
-                                {min: 6, message: 'Password must be at least 6 characters long!'}]}
+                                {min: 3, message: 'Password must be at least 3 characters long!'}]}
                         >
                             <Input prefix={<LockOutlined/>} type="password" placeholder="Password"/>
                         </Form.Item>
@@ -79,7 +94,7 @@ function Login() {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button block type="primary" htmlType="submit">
+                            <Button block type="primary" htmlType="submit" loading={loading}>
                                 Log in
                             </Button>
                             or <a href="">Register now!</a>

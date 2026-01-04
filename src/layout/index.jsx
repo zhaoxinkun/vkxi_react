@@ -49,46 +49,44 @@ function LayoutPage() {
 
     // 侧边栏是否折叠
     const [collapsed, setCollapsed] = useState(false);
-    const toggleCollapsed = () => {
-        setCollapsed(!collapsed);
-    };
 
     return (
         <div className="module">
             <Layout>
+
                 {/*侧边栏*/}
                 <Sider
+                    // 是下边多的那个三角的
                     collapsible
                     collapsed={collapsed}
                     onCollapse={setCollapsed}
-                    width={150}
+                    width={180}
                     collapsedWidth={64}
                 >
                     <div className="logo-title">
-                        {
-                            collapsed ? "教务" : "朝夕教育教务系统"
-                        }
-                    </div>
-                    <div className="sider-toggle">
-                        {/*侧边栏折叠按钮*/}
-                        <Button type="primary" onClick={toggleCollapsed} style={{margin: "0px auto"}}>
-                            {collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-                        </Button>
+                        朝夕教育教务系统
                     </div>
                     <Menu
-                        defaultSelectedKeys={['sub2']}
-                        defaultOpenKeys={['sub2']}
+                        defaultSelectedKeys={['index']}
+                        defaultOpenKeys={['teacher']}
                         mode="inline"
                         items={SiderItems}
                         theme="dark"
-                        inlineCollapsed={collapsed}
                     />
                 </Sider>
 
 
                 {/*主内容区域*/}
                 <Layout className="site-layout">
-                    <Header className="site-layout-background">
+                    <Header className="site-layout-background" style={{padding: 0}}>
+                        {/*侧边栏折叠按钮*/}
+                        <Button
+                            type="text"
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{fontSize: '16px', width: 64, height: 64}}
+                        >
+                            {collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                        </Button>
                         <Button type="primary" onClick={() => navigate("/login")}>用户退出</Button>
                     </Header>
                     <Content className="site-layout-background" style={{margin: 16, padding: 20}}>
