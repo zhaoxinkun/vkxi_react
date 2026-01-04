@@ -60,4 +60,9 @@ on how to integrate TypeScript and [`typescript-eslint`](https://typescript-esli
       1. 侧边栏
       2. 头部导航(logOut请求)
       3. 轮播图(antd 的Carousel实现)
-      4. echarts 组件搭建
+      4. **echarts 组件搭建**
+         1. 这个是最主要的了,我们需要按需加载 utils/echarts.js
+         2. 然后我们创建一个通用的创建图表的壳子components/echarts/index
+         3. 再然后就是创建一个图表组件的配置文件,通过props传递数据Dashorad/Echarts/config.js
+         4. 单个的图表组件Dashorad/Echarts/echartsCom
+         5. 组件的配置数据Dashorad/Echarts/options

@@ -36,7 +36,7 @@ function Login() {
                 setToken(res.token)
                 message.success(res.msg || '登录成功');
                 form.resetFields()
-                navigate('/home')
+                navigate('/home/index')
             } else {
                 message.error(res.msg || '登录失败，请重试');
             }

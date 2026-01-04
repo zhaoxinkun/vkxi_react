@@ -1,0 +1,78 @@
+name: Deploy VkxiReact Admin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # 3. 安装 pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      # 4. 安装依赖
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. 构建 React（生成 dist）
+      - name: Build
+        run: pnpm build
+
+      # 6. 打包 dist（减少传输文件数）
+      - name: Archive dist
+        run: tar -czf dist.tar.gz dist
+
+      # 7. 上传到服务器
+      - name: Upload dist to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: dist.tar.gz
+          target: /tmp
+
+      # 8. 服务器端发布 + 切软链接
+      - name: Publish on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            set -e
+
+            APP_DIR="/www/vixi_react_admin"
+            RELEASE_DIR="$APP_DIR/releases/$(date +%Y%m%d%H%M%S)"
+
+            mkdir -p "$RELEASE_DIR"
+            tar -xzf /tmp/dist.tar.gz -C "$RELEASE_DIR"
+
+            # 原子切换 current（不需要 reload nginx）
+            ln -sfn "$RELEASE_DIR/dist" "$APP_DIR/current"
+
+            # 清理临时文件
+            rm -f /tmp/dist.tar.gz
+
+            # 只保留最近 5 个版本（可回滚）
+            cd "$APP_DIR/releases"
+            ls -1dt */ | tail -n +6 | xargs -r rm -rf
