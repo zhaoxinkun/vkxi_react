@@ -1,4 +1,4 @@
-name: Deploy VkxiReact Admin
+name: Deploy React Admin
 
 on:
   push:
