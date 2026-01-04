@@ -3,6 +3,7 @@ import {Layout, Button, Menu} from "antd";
 import {useNavigate, Link, Outlet} from "react-router-dom";
 import {MailOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons';
 import {useState} from "react";
+import {deleteToken} from "@/utils/token.js";
 
 const {Header, Sider, Content} = Layout;
 
@@ -50,6 +51,12 @@ function LayoutPage() {
     // 侧边栏是否折叠
     const [collapsed, setCollapsed] = useState(false);
 
+    // 退出登录
+    const logout = () => {
+        deleteToken()
+        navigate("/login")
+    }
+
     return (
         <div className="module">
             <Layout>
@@ -87,7 +94,7 @@ function LayoutPage() {
                         >
                             {collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
                         </Button>
-                        <Button type="primary" onClick={() => navigate("/login")}>用户退出</Button>
+                        <Button type="primary" onClick={logout}>用户退出</Button>
                     </Header>
                     <Content className="site-layout-background" style={{margin: 16, padding: 20}}>
                         {/*路由出口*/}

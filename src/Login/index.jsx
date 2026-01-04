@@ -4,7 +4,7 @@ import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
 import {userLogin} from "@/api/api.js";
 import md5 from "md5";
-import {setToken} from "@/utils/toekn.js";
+import {setToken} from "@/utils/token.js";
 import {useState} from "react";
 
 
