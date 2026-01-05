@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {getToken} from "@/utils/token.js";
 
 // 基本地址
 // axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
@@ -9,8 +10,11 @@ const request = axios.create({
 })
 
 // 请求拦截器
-request.interceptors.request.use(config =>
-    config)
+request.interceptors.request.use(config => {
+        config.headers['token'] = getToken()
+        return config
+    }
+)
 
 // 响应拦截器
 request.interceptors.response.use(res => {

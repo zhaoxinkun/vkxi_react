@@ -12,13 +12,17 @@ function Login() {
 
     // 路由导航
     const navigate = useNavigate();
+
     // 表单数据获取
     const [form] = Form.useForm()// ✅ 顶层
 
+    // 信息框提示
     const {message} = App.useApp(); // ✅ v6 使用正解
 
-    const [loading, setLoading] = useState(false); //防止多次点击发送登陆请求
+    //防止多次点击发送登陆请求
+    const [loading, setLoading] = useState(false);
 
+    // 表单提交
     const onFinish = async (value) => {
 
         setLoading(true);
@@ -33,7 +37,8 @@ function Login() {
 
             // 判断进入
             if (res.code === 20000) {
-                setToken(res.token)
+                console.log(res);
+                setToken(res.data.token)
                 message.success(res.msg || '登录成功');
                 form.resetFields()
                 navigate('/home/index')
