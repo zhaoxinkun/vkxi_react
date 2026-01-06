@@ -27,3 +27,18 @@ export const createTeacherDetail = data => http.post(`teacher/create-update`, da
 
 //删除老师
 export const deleteTeacherDetail = id => http.delete(`teacher/removeUser/${id}`);
+
+// 获取所有课程
+export const getCourseAll = data => http.get(`course/all`, data);
+
+// 获取所有老师
+export const getTeacherAll = data => http.get(`teacher/all`, data);
+
+//老师管理-所授课程-提交
+export const teacherCourseRel = data => http.post(`teacherCourseRel/createOrUpd`, data);
+
+//资料管理-资料上传
+export const materialCreate = data => http.upload(`material/create`,data);
+
+//资料管理-资料列表展示（下载）
+export const getMaterial = data => http.get(`material/list`,data);

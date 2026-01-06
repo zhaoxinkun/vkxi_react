@@ -6,6 +6,9 @@ import Teacher from "@/pages/Teacher/index.jsx";
 import Course from "@/pages/Course/index.jsx";
 import TeacherInfo from "@/pages/Teacher/TeacherInfo/index.jsx";
 import CoursesTaught from "@/pages/Teacher/CoursesTaught/index.jsx";
+import InformationsCom from "@/pages/Informations/index.jsx";
+import DataDownload from "@/pages/Informations/dataDownload.jsx";
+import DataUpload from "@/pages/Informations/dataUpload.jsx";
 
 
 export const routes = [
@@ -54,6 +57,24 @@ export const routes = [
                         element: <CoursesTaught/>,
                     },
                 ]
+            },
+            {
+                path: '/home/information',
+                name: 'information',
+                element: <InformationsCom/>,
+                children: [
+                    {
+                        path: '/home/information/dataUpload',
+                        name: 'dataUpload',
+                        element: <DataUpload/>,
+                    },
+                    {
+                        path: '/home/information/dataDownload',
+                        name: 'dataDownload',
+                        element: <DataDownload/>
+                    }
+                ]
+
             },
 
         ]
