@@ -52,8 +52,6 @@ function TeacherInfo() {
     // 请求数据
     const queryData = async () => {
         let res = (await getTeacherList(query)).data;
-
-        console.log(res)
         setData(res.data.list);
         setTotal(res.data.rows || 0);
     }

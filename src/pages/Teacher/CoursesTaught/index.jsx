@@ -1,5 +1,5 @@
 import {Button, Card, DatePicker, Form, Input, notification, Select} from "antd";
-import styles from '@/css/form.module.scss';
+import styles from '@/style/form.module.scss';
 import {useEffect, useState} from "react";
 import {getCourseAll, getTeacherAll, teacherCourseRel} from "@/api/api.js";
 import {useNavigate} from "react-router-dom";
@@ -20,7 +20,7 @@ function CoursesTaught() {
     const queryData = async () => {
         let {data: {data: courseData}} = await getCourseAll();
         let {data: {data: teacherData}} = await getTeacherAll();
-        console.log(courseData, teacherData);
+        // console.log(courseData, teacherData);
         setAllCourse(courseData);
         setAllTeacher(teacherData);
     }
@@ -30,7 +30,7 @@ function CoursesTaught() {
     }, []);
 
     const onFinish = values => {
-        console.log(values);
+        // console.log(values);
     };
 
     //提交

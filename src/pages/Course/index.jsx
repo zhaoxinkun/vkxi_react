@@ -117,7 +117,6 @@ export function Course() {
     // 获取课程列表信息
     const queryData = async () => {
         let res = (await getCourseList(listQuery)).data;
-        console.log(res)
         if (res.code === 20000) {
             setData(res.data.list || [])
             setTotal(res.data.rows || 0)

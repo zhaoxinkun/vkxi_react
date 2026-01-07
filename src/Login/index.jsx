@@ -1,4 +1,4 @@
-import "@/css/login.css"
+import "@/Login/login.css"
 import {Button, Form, Input, Checkbox, Flex, App} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
@@ -6,6 +6,7 @@ import {userLogin} from "@/api/api.js";
 import md5 from "md5";
 import {setToken} from "@/utils/token.js";
 import {useState} from "react";
+import {setUserType} from "@/utils/userType.js";
 
 
 function Login() {
@@ -39,6 +40,7 @@ function Login() {
             if (res.code === 20000) {
                 console.log(res);
                 setToken(res.data.token)
+                setUserType(res.data.user.type)
                 message.success(res.msg || '登录成功');
                 form.resetFields()
                 navigate('/home/index')

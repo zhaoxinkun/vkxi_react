@@ -4,7 +4,7 @@ import {useState} from "react";
 import back1 from '@/assets/img/back1.jpg';
 import back2 from '@/assets/img/back2.jpg';
 
-import {LineChart, ColumnarChart} from "@/pages/Dashoard/Echarts/index.js";
+import {LineChart, ColumnarChart} from "@/pages/Dashoard/Echarts/ehcartsCom/index.js";
 import {barChartOptions, lineChartOptions} from "@/pages/Dashoard/Echarts/options/index.js";
 import Model from "@/pages/Home/model.jsx";
 import {MailOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons';
@@ -20,6 +20,7 @@ function Home() {
     return (
         <>
 
+            {/*banner位*/}
             <div className="banner">
                 <Carousel autoplay autoplaySpeed={3000}>
                     {img.map((item, index) => <img key={index} src={item} alt=""/>)}
@@ -29,6 +30,7 @@ function Home() {
 
                 <div style={{flex: "0 1 60%", margin: '5px'}}>
                     <Card title="Card title">
+                        {/*图表组件*/}
                         <ColumnarChart options={barChartOptions} height={320}></ColumnarChart>
                     </Card>
                 </div>
@@ -38,6 +40,7 @@ function Home() {
                     <div className="module-box">
                         <div style={{flex: "0 1 100%", margin: '5px'}}>
                             <Card title="Card title">
+                                {/*图表组件*/}
                                 <LineChart options={lineChartOptions} height={320}></LineChart>
                             </Card>
                         </div>
@@ -46,6 +49,7 @@ function Home() {
                     <div className="module-box">
                         <div style={{flex: "0 1 100%", margin: '5px'}}>
                             <Card title="Card title">
+                                {/*模型组件*/}
                                 <Model list={modelData}></Model>
                             </Card>
                         </div>
