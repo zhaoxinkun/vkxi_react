@@ -1,14 +1,24 @@
 import {Table, Space, Button, Modal, Form, Input, DatePicker, message, Pagination} from "antd";
-import {useEffect, useState} from "react";
 import {createTeacherDetail, deleteTeacherDetail, getTeacherList} from "@/api/api.js";
 import {dateFilter} from "@/utils/dateFilter.js";
-import dayjs from "dayjs";
 import MyPagination from "@/components/Pagination/MyPagination.jsx";
+import {useFormCrudModal} from "@/Hooks/Modal/useFormCrudModal.jsx";
+import {useList} from "@/Hooks/List/useList.jsx";
+
 
 function TeacherInfo() {
 
-    // 列表数据
-    const [data, setData] = useState([]);
+    const {
+        data,
+        total,
+        query,
+        setQuery,
+        reload,
+        loading,
+    } = useList(getTeacherList);
+
+    //modal类型的判断以及数据的保存
+    const {open, modalType, record, openAdd, openEdit, close, form} = useFormCrudModal();
 
     // 列表表头
     const columns = [
@@ -35,7 +45,7 @@ function TeacherInfo() {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button onClick={() => showModal(record, 'edit')}>编辑</Button>
+                    <Button onClick={() => openEdit(record)}>编辑</Button>
                     <Button danger onClick={() => {
                         handelDel(record)
                     }}>删除</Button>
@@ -44,62 +54,17 @@ function TeacherInfo() {
         },
     ];
 
-    // query数据
-    const [query, setQuery] = useState({
-        pageNo: 1,
-        pageSize: 10
-    });
-    // 请求数据
-    const queryData = async () => {
-        let res = (await getTeacherList(query)).data;
-        setData(res.data.list);
-        setTotal(res.data.rows || 0);
-    }
-    // 获取教师列表
-    useEffect(() => {
-        queryData()
-    }, [query]);
-
-    // 分页器总条数
-    const [total, setTotal] = useState(0);
-
-    // modal
-    const [modalOpen, setModalOpen] = useState(false);
-    // modal 类型
-    const [modalType, setModalType] = useState('add');
-
-    // modal的表单
-    const [form] = Form.useForm();
-
-    // 单行数据
-    const [record, setRecord] = useState(null);
-
-    const showModal = (record, type) => {
-        setModalType(type);
-        setModalOpen(true);
-        setRecord(record);
-        const value = type === "add" ? form.resetFields() : {
-            ...record,
-            created: record.created ? dayjs(record.created) : null
-        };
-        form.setFieldsValue(value); //设置form的值
-    };
 
     const handleOk = () => {
-        setModalOpen(false);
         form.validateFields().then(async (values) => {
             let res = (await createTeacherDetail({...record, ...values})).data
             if (res.code === 20000) {
-                setModalOpen(false);
-                queryData()
+                close()
+                await reload()
             } else {
                 message.error(res.msg || "操作失败")
             }
         })
-    };
-
-    const handleCancel = () => {
-        setModalOpen(false);
     };
 
     // 删除教师
@@ -124,11 +89,12 @@ function TeacherInfo() {
                 pagination={false}
                 bordered
                 rowKey="id"
+                loading={loading}
                 style={{
                     marginBottom: 20
                 }}
                 title={() => (
-                    <Button type="primary" onClick={() => showModal(null, 'add')}>添加老师</Button>
+                    <Button type="primary" onClick={openAdd}>添加老师</Button>
                 )}
             />
 
@@ -164,9 +130,9 @@ function TeacherInfo() {
             <Modal
                 title={modalType === 'add' ? '添加老师' : '更新老师'}
                 closable={{'aria-label': 'Custom Close Button'}}
-                open={modalOpen}
+                open={open}
                 onOk={handleOk}
-                onCancel={handleCancel}
+                onCancel={close}
                 okText={modalType === 'add' ? '添加' : '更新'}
                 cancelText="取消"
             >

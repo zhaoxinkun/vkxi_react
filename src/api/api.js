@@ -38,7 +38,18 @@ export const getTeacherAll = data => http.get(`teacher/all`, data);
 export const teacherCourseRel = data => http.post(`teacherCourseRel/createOrUpd`, data);
 
 //资料管理-资料上传
-export const materialCreate = data => http.upload(`material/create`,data);
+export const materialCreate = data => http.upload(`material/create`, data);
 
 //资料管理-资料列表展示（下载）
-export const getMaterial = data => http.get(`material/list`,data);
+export const getMaterial = data => http.get(`material/list`, data);
+
+
+// 学生数据管理
+// 获取学生列表信息
+export const getStudentList = data => http.get(`/student/list`, data);
+
+// 创建学生
+export const createStudentDetail = data => http.post(`student/create-update`, data);
+
+// 删除学生信息
+export const deleteStudentDetail = data => http.delete(`student/removeUser/${data}`);

@@ -18,8 +18,8 @@ function HeaderCom(props) {
 
     // 退出登录
     const logout = () => {
-        deleteToken()
-        clearUserType()
+        deleteToken() // 删除token
+        clearUserType() // 清除用户类型
         navigate("/login")
     }
     return (
